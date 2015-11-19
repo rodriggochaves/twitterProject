@@ -16,6 +16,7 @@ from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
 from kivy.uix.popup import *
 
+import nltk.tweet_search
 
 class mainScreen(FloatLayout):
 
@@ -25,10 +26,10 @@ class mainScreen(FloatLayout):
 		Window.size = (1000, 500)
 		layout = FloatLayout(size=(1000, 500))
 
-		keyword_input = TextInput(multiline=False
+		self.keyword_input = TextInput(multiline=False
 		,size_hint=(.40, .25),
 		pos=(5, 330))
-		self.add_widget(keyword_input)
+		self.add_widget(self.keyword_input)
 
 		keyword_label = Label(
     	text='Keyword Input',
@@ -84,7 +85,7 @@ class mainScreen(FloatLayout):
 
 	#Metodo que recebe keywords e pesquisa pelos tweets
 	def pesquisar(self,instance):
-		print "Logica para pesquisar"
+		nltk.tweet_search.getTweets(self.keyword_input)
 
 	def limpar_banco(self,instance):
 		print "Logica para limpar banco"
