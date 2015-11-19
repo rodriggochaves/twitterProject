@@ -10,7 +10,7 @@ try:
     tso.setCount(100) # please dear Mr Twitter, only give us 100 results per page
     tso.setIncludeEntities(False) # and don't give us all those entity information
     # tso.setGeocode(-23.516394,-46.63554,1000,km=True)#I want only posts near Sao Paulo
-    #tso.setUntil(datetime.date(2014, 01, 26))
+    # tso.setUntil(datetime.date(2014, 01, 26))
 
     ts = TwitterSearch(
 		consumer_key = 'VqUEyEu7lXO5z5lWqoTkYOUmZ',

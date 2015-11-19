@@ -28,7 +28,7 @@ class DAO_User():
 			print "Usuario cadastrado com sucesso"
 			conn.close()
 		except Exception,e:
-			print "Erro ao conectar no Banco de dados ou durante a operaçao"
+			print "Erro ao conectar no Banco de dados ou durante a operaçao" + str(e)
 			return 0
 
 	#Metodo que recebe um usuario e senha e caso estejam cadastrados permite o login no sistema
