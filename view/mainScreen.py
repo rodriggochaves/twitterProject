@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import division
 
 #Gabriel Mesquita de Araujo 13/0009121
 #Modulo responsavel pela interface gráfica no sistema.
@@ -29,6 +30,12 @@ class mainScreen(FloatLayout):
 	
 	good_mood_checked = False
 	bad_mood_checked = False
+
+	result_sentence = "Pudim"
+
+	positive_result = 0
+	negative_result = 0
+	total_result = 0
 
 	# métodos da classe 
 
@@ -66,7 +73,7 @@ class mainScreen(FloatLayout):
 		result.bind(on_press=self.result)
 
 		resultados = Label(
-    	text='Resultado',
+    	text=self.result_sentence,
    		size_hint=(.50, .50),
    		pos=(5,5))
 		self.add_widget(resultados)
@@ -209,10 +216,6 @@ class mainScreen(FloatLayout):
 
 	def result(self, instance):
 		print "Button for result is pressed"
-		
-		self.positive_result = 0
-		self.negative_result = 0
-		self.total_result = 0
 
 		# open the file
 		f = open('tweets.txt', 'r')
@@ -234,10 +237,18 @@ class mainScreen(FloatLayout):
 				self.negative_result += 1
 
 		print self.total_result
-		print self.positive_result
+		print self.positive_result / self.total_result
 		print self.negative_result
 
+		# block division by zero
+		if not self.total_result == 0:
+			self.result_sentence = "We got " + str(self.positive_result / self.total_result) + " positives tweets and " + str(self.negative_result / self.total_result) + " negatives tweets"
+		else:
+			self.result_sentence = "Do a research!"
 
-			
-			
-				
+		# makes result pop-up
+		content = Button(text=self.result_sentence)
+		popup = Popup(title='Resultados', content=content, size_hint=(None, None), size=(800, 400)).open()
+		content.bind(on_press=popup.dismiss)
+		popup.open()
+		# content.bind(on_press=self.housekeep)
