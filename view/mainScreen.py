@@ -116,7 +116,7 @@ class mainScreen(FloatLayout):
 			pos=(570, 230)
 		)
 		self.add_widget(good_mood)
-		good_mood.bind(active=self.select_bad_mood)
+		good_mood.bind(active=self.select_good_mood)
 
 		# bad mood label for language 
 		bad_mood_label = Label(
@@ -150,10 +150,13 @@ class mainScreen(FloatLayout):
 		text = self.frase_input.text.split(";")
 
 		# seleciona o humor da palavra
-		if(self.good_mood_checked and not self.bad_mood_checked):
+		if(self.good_mood_checked and self.bad_mood_checked):
+			print "This is not a mess"
+			return 0
+		elif(self.good_mood_checked):
 			print "Good mood"
 			mood = 10
-		elif (self.bad_mood_checked and not self.good_mood_checked):
+		elif (self.bad_mood_checked):
 			print "Bad mood"
 			mood = 0
 		else:
@@ -176,11 +179,11 @@ class mainScreen(FloatLayout):
 			self.good_mood_checked = True
 		else:
 			self.good_mood_checked = False
-		print self.good_mood_checked
+		print "Good mood is " + str(self.good_mood_checked)
 
 	def select_bad_mood(self, checkbox, value):
 		if value:
 			self.bad_mood_checked = True
 		else:
 			self.bad_mood_checked = False
-		print self.bad_mood_checked
+		print "Bad mood is " + str(self.bad_mood_checked)
