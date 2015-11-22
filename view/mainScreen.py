@@ -159,6 +159,7 @@ class mainScreen(FloatLayout):
 
 	def limpar_banco(self,instance):
 		print "Logica para limpar banco"
+		self.dbc.deleteAllWords()
 
 	def treinar(self,instance):
 		# bring all words from the db and put in array

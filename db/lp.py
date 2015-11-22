@@ -62,7 +62,9 @@ class ConexaoMySQL ():
 			rows = self.cur.fetchall()
 			for row in rows:
 				self.cur.execute("DELETE FROM Word WHERE idWord = %s", (row["idWord"]))
-			return 1	############################################################################################################################################
+			return 1	
+############################################################################################################################################
+
 	def selecionaPalavra (self, lingua, rating):
 		with self.con:			
 			idrating = []				# seleciona palavras de um certo idioma com uma certa classificação
@@ -100,6 +102,10 @@ class ConexaoMySQL ():
 		for word in result:
 			words.append(word['descrWord'])
 		return words
+
+	def deleteAllWords(self):
+		self.cur.execute("DELETE FROM Word")
+		self.con.commit()
 
 	def encerraConexao(self):
 		with self.con:		
