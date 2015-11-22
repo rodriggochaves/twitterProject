@@ -45,8 +45,6 @@ class ConexaoMySQL ():
 		return 1
 
 ############################################################################################################################################
-#
-#
 	def deletaPalavra (self, descrP, lingua, rating):
 		with self.con:			
 			self.cur.execute("SELECT rating FROM Rating WHERE descrRating LIKE %s", rating)
@@ -94,11 +92,17 @@ class ConexaoMySQL ():
 						pesquisa.append((k["descrWord"], k["descrLanguage"], k["descrRating"]))
 			return pesquisa	# retorna todas as tuplas da pesquisa desejada 
 	############################################################################################################################################
+	
+	def findAllWithMood(self, mood):
+		self.cur.execute("SELECT * FROM Word WHERE rating = %s", [str(mood)])
+		result = self.cur.fetchall()
+		words = []
+		for word in result:
+			words.append(word['descrWord'])
+		return words
+
 	def encerraConexao(self):
 		with self.con:		
 			self.con.commit()
 		self.con.close()
 		self.cur.close()
-
-	def helpMe(self):
-		print "Stop rainning"

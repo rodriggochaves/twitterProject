@@ -19,8 +19,9 @@ from kivy.uix.checkbox import CheckBox
 from kivy.graphics import Color
 from kivy.uix.dropdown import DropDown
 
-import nltk.tweet_search
+import processor.tweet_search
 import db.lp
+import processor.classifier
 
 class mainScreen(FloatLayout):
 
@@ -133,16 +134,25 @@ class mainScreen(FloatLayout):
 		self.add_widget(bad_mood)
 		bad_mood.bind(active=self.select_bad_mood)
 
+		# makes connection with database
+		self.dbc = db.lp.ConexaoMySQL("localhost", "root", "", "projetoLPWords")
+
 	#Metodo que recebe keywords e pesquisa pelos tweets
 	def pesquisar(self,instance):
-		nltk.tweet_search.getTweets(self.keyword_input.text)
+		processor.tweet_search.getTweets(self.keyword_input.text)
 
 	def limpar_banco(self,instance):
 		print "Logica para limpar banco"
 
 	def treinar(self,instance):
-		print "logica para adicionar treinar"
+		# bring all words from the db and put in array
+		goodWords = self.dbc.findAllWithMood(10)
+		badWords = self.dbc.findAllWithMood(0)
 
+		self.classifier = processor.classifier.Classifier(goodWords, badWords)
+		print "Our classifier is ready to analysis some tweets"
+
+	# this method breaks all MVC design
 	def addFrase(self,instance):
 		dbc = db.lp.ConexaoMySQL("localhost", "root", "", "projetoLPWords")
 
