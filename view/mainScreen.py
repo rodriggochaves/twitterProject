@@ -20,25 +20,35 @@ from kivy.uix.checkbox import CheckBox
 from kivy.graphics import Color
 from kivy.uix.dropdown import DropDown
 
+# importa biblioteca que faz pesquisa de tweets
 import processor.tweet_search
+
+# importa classe responsável pela interface com o banco de dados
 import db.lp
+
+# importa classe responsável por criar o classificador treinado
 import processor.classifier
 
 class mainScreen(FloatLayout):
 
 	# atributos da classe
 	
+	# verificadores da CheckBox de qual humor deve ser inserido
+	# no banco
 	good_mood_checked = False
 	bad_mood_checked = False
 
-	result_sentence = "Pudim"
+	# atributo que irá armazenar a string de resultado
+	result_sentence = ""
 
+	# resultados da pesquisa detalhadas
 	positive_result = 0
 	negative_result = 0
 	total_result = 0
 
 	# métodos da classe 
-
+	# construtor: cria a tela principal
+	# e a conexão com o db de palavras
 	def __init__(self, **kwargs):
 
 		super(mainScreen, self).__init__(**kwargs)
@@ -108,17 +118,7 @@ class mainScreen(FloatLayout):
    		size_hint=(.2, .1),
    		pos=(620, 270))
 		self.add_widget(addFrase)
-		addFrase.bind(on_press=self.addFrase)	
-
-		# language checkbox
-		# language = CheckBox(
-		# 	size_hint=(.1, .1),
-		# 	pos=(570, 230),
-		# 	color=(1, 0, 0, 1),
-		# 	background_color=(0, 0, 0, 1)
-		# )
-		# self.add_widget(language)
-		# language.bind(active=self.select_language)
+		addFrase.bind(on_press=self.addFrase)
 
 		# good mood label for language 
 		good_mood_label = Label(
@@ -157,10 +157,13 @@ class mainScreen(FloatLayout):
 	def pesquisar(self,instance):
 		processor.tweet_search.getTweets(self.keyword_input.text)
 
+	# método que limpa o banco
 	def limpar_banco(self,instance):
 		print "Logica para limpar banco"
-		self.dbc.deleteAllWords()
+		self.dbc.esvaziaTabelaWords()
 
+	# método que cria o atributo classificador treinado
+	# conforme o banco de dados
 	def treinar(self,instance):
 		# bring all words from the db and put in array
 		goodWords = self.dbc.findAllWithMood(10)
@@ -169,7 +172,8 @@ class mainScreen(FloatLayout):
 		self.classifier = processor.classifier.Classifier(goodWords, badWords)
 		print "Our classifier is ready to analysis some tweets"
 
-	# this method breaks all MVC design
+	# adiciona a frase que está no campo
+	# ao banco de dados
 	def addFrase(self,instance):
 		dbc = db.lp.ConexaoMySQL("localhost", "root", "", "projetoLPWords")
 
@@ -193,14 +197,7 @@ class mainScreen(FloatLayout):
 		for sentence in text:
 			dbc.inserePalavra(sentence, "pt", mood)
 
-
-	def select_language(self, checkbox, value):
-		if value:
-			print('The checkbox', checkbox, 'is active')
-		else:
-			 print('The checkbox', checkbox, 'is inactive')
-
-
+	# verifica se o valor da check box de bom humor está selecionado
 	def select_good_mood(self, checkbox, value):
 		if value:
 			self.good_mood_checked = True
@@ -208,6 +205,7 @@ class mainScreen(FloatLayout):
 			self.good_mood_checked = False
 		print "Good mood is " + str(self.good_mood_checked)
 
+	# verifica se o valor da check box de mal humor está selecionado
 	def select_bad_mood(self, checkbox, value):
 		if value:
 			self.bad_mood_checked = True
@@ -215,6 +213,8 @@ class mainScreen(FloatLayout):
 			self.bad_mood_checked = False
 		print "Bad mood is " + str(self.bad_mood_checked)
 
+	# método que análisa o resultado a partir do arquivo e
+	# cria a pop com resultados
 	def result(self, instance):
 		print "Button for result is pressed"
 
@@ -243,13 +243,18 @@ class mainScreen(FloatLayout):
 
 		# block division by zero
 		if not self.total_result == 0:
-			self.result_sentence = "We got " + str(self.positive_result / self.total_result) + " positives tweets and " + str(self.negative_result / self.total_result) + " negatives tweets"
+			self.result_sentence = "We got " + \
+			str(self.positive_result / self.total_result) + \
+			" positives tweets and " + \
+			str(self.negative_result / self.total_result) + \
+			" negatives tweets"
 		else:
 			self.result_sentence = "Do a research!"
 
 		# makes result pop-up
 		content = Button(text=self.result_sentence)
-		popup = Popup(title='Resultados', content=content, size_hint=(None, None), size=(800, 400)).open()
+		popup = Popup(title='Resultados', content=content, 
+			size_hint=(None, None), size=(800, 400)).open()
 		content.bind(on_press=popup.dismiss)
 		popup.open()
 		# content.bind(on_press=self.housekeep)

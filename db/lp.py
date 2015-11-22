@@ -11,10 +11,13 @@ import sys
 
 class ConexaoMySQL ():
 
-	def __init__(self, host, user, password, database):	# construtor. Cria conexão com o mysql. 
+	# Construtor que inicia a conexão com banco de dados e cria o cursos para a 
+	# execução de queries
+	def __init__(self, host, user, password, database):
 		self.con = mdb.connect(host, user, password, database)
 		self.cur = self.con.cursor(mdb.cursors.DictCursor)
-############################################################################################################################################	
+
+	# método que retorna todas as línguas como um array
 	def mostraLinguas(self):
 		with self.con:		
 			linguas = []			
@@ -23,7 +26,8 @@ class ConexaoMySQL ():
 			for row in rows:
 				linguas.append(row["descrLanguage"])
 			return linguas
-############################################################################################################################################
+
+	# método que retorna todos os ratings como um array
 	def mostraRatings(self):
 		with self.con:		
 			ratings = []			
@@ -32,19 +36,19 @@ class ConexaoMySQL ():
 			for row in rows:
 				ratings.append(row["descrRating"])
 			return ratings
-############################################################################################################################################
+
+	# Apaga todos os dados na tabela word
 	def esvaziaTabelaWords(self):
 		with self.con:		
 			self.cur.execute("TRUNCATE Word")	
 
-############################################################################################################################################
-
-	def inserePalavra (self, descrP, idlingua, idrating):	# inserção de palavra			
+	# inserção de palavra
+	def inserePalavra (self, descrP, idlingua, idrating):
 		self.cur.execute("INSERT INTO Word (descrWord, idLanguage, rating) VALUES (%s, %s, %s)", (descrP, idlingua, idrating))
 		self.con.commit()
 		return 1
 
-############################################################################################################################################
+	# deleta uma palavra conforme a descrição, língua e rating
 	def deletaPalavra (self, descrP, lingua, rating):
 		with self.con:			
 			self.cur.execute("SELECT rating FROM Rating WHERE descrRating LIKE %s", rating)
@@ -63,8 +67,8 @@ class ConexaoMySQL ():
 			for row in rows:
 				self.cur.execute("DELETE FROM Word WHERE idWord = %s", (row["idWord"]))
 			return 1	
-############################################################################################################################################
 
+	# seleciona uma palavra conforme a lingua e o rating
 	def selecionaPalavra (self, lingua, rating):
 		with self.con:			
 			idrating = []				# seleciona palavras de um certo idioma com uma certa classificação
@@ -93,8 +97,8 @@ class ConexaoMySQL ():
 					for k in rows:
 						pesquisa.append((k["descrWord"], k["descrLanguage"], k["descrRating"]))
 			return pesquisa	# retorna todas as tuplas da pesquisa desejada 
-	############################################################################################################################################
 	
+	# método que acha todas as palavras conforme um determinado humor
 	def findAllWithMood(self, mood):
 		self.cur.execute("SELECT * FROM Word WHERE rating = %s", [str(mood)])
 		result = self.cur.fetchall()
@@ -103,10 +107,7 @@ class ConexaoMySQL ():
 			words.append(word['descrWord'])
 		return words
 
-	def deleteAllWords(self):
-		self.cur.execute("DELETE FROM Word")
-		self.con.commit()
-
+	# acaba a conexão com o banco de dados
 	def encerraConexao(self):
 		with self.con:		
 			self.con.commit()

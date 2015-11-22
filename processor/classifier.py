@@ -30,24 +30,39 @@ class Classifier():
 		# be multiplied by 0.2 when this word is seen as part of the input.
 		self.classifier = nltk.NaiveBayesClassifier.train(training_set)
 
-	
+	# creates a tuple with the selected mood
 	def arrayWithMood(self, array, feeling):
 		arrayWithFeeling = []
 		for word in array:
 			arrayWithFeeling.append((word, feeling))
 		return arrayWithFeeling
 
+	# isolate all words inside the tweets
 	def get_words_in_tweets(self, tweets):
 	    all_words = []
 	    for (words, sentiment) in tweets:
 	      	all_words.extend(words)
 	    return all_words
 
+	# verifies the occurrences of all word inside positive and
+	# negative tweets.
 	def get_word_features(self, wordlist):
 	    wordlist = nltk.FreqDist(wordlist)
 	    word_features = wordlist.keys()
 	    return word_features
 
+	# análisa quais features estão presentes no determinado tweet
+	# {
+	# 	Features ============ Occurrence
+	#  'contains(looking)': False,
+	#  'contains(tired)': False,
+	#  'contains(forward)': False,
+	#  'contains(car)': True,
+	#  'contains(the)': False,
+	#  'contains(amazing)': False,
+	#  'contains(enemy)': False,
+	#  'contains(great)': False
+	# }
 	def extract_features(self, document):
 	    document_words = set(document)
 	    features = {}
