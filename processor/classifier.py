@@ -23,10 +23,10 @@ class Classifier():
 		# The Naive Bayes classifier uses the prior probability of each label 
 		# which is the frequency of each label in the training set, and the 
 		# contribution from each feature. In our case, the frequency of each 
-		# label is the same for ‘positive’ and ‘negative’. The word ‘amazing’ 
+		# label is the same for 'positive' and 'negative'. The word 'amazing'
 		# appears in 1 of 5 of the positive tweets and none of the negative 
 		# tweets. This means that the likelihood (probabilidade) of the 
-		# ‘positive’ label will 
+		# 'positive' label will 
 		# be multiplied by 0.2 when this word is seen as part of the input.
 		self.classifier = nltk.NaiveBayesClassifier.train(training_set)
 

@@ -49,12 +49,21 @@ class mainScreen(FloatLayout):
     	pos=(5, 450))
 		self.add_widget(keyword_label)
 
+		# research button
 		pesquisar = Button(
     	text='Pesquisar',
    		size_hint=(.1, .1),
    		pos=(5, 270))
 		self.add_widget(pesquisar)
 		pesquisar.bind(on_press=self.pesquisar)
+
+		# result button
+		result = Button(
+    	text='Resultados',
+   		size_hint=(.1, .1),
+   		pos=(310, 270))
+		self.add_widget(result)
+		result.bind(on_press=self.result)
 
 		resultados = Label(
     	text='Resultado',
@@ -197,3 +206,38 @@ class mainScreen(FloatLayout):
 		else:
 			self.bad_mood_checked = False
 		print "Bad mood is " + str(self.bad_mood_checked)
+
+	def result(self, instance):
+		print "Button for result is pressed"
+		
+		self.positive_result = 0
+		self.negative_result = 0
+		self.total_result = 0
+
+		# open the file
+		f = open('tweets.txt', 'r')
+
+		# classify every line of tweets.txt and let us know the number 
+		# of positive and negatives arrays
+		for line in f:
+			# extracts features from the current line of tweet
+			tweet = self.classifier.extract_features(line.split())
+
+			# classify the tweet
+			result = self.classifier.classifier.classify(tweet)
+
+			#logic for quantity result
+			self.total_result += 1
+			if result == 'positive':
+				self.positive_result += 1
+			elif result == 'negative':
+				self.negative_result += 1
+
+		print self.total_result
+		print self.positive_result
+		print self.negative_result
+
+
+			
+			
+				

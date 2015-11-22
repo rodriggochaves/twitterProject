@@ -36,7 +36,7 @@ def getTweets(keywords):
 	        info = tweet['text'] + " " + date
 	        data2Save = unicodedata.normalize('NFKD', info).encode('utf-8','ignore')
 
-	        saveFile = open('movies.txt', 'a')
+	        saveFile = open('tweets.txt', 'a')
 	        saveFile.write(data2Save)
 	        saveFile.write('\n')
 	        saveFile.close()
