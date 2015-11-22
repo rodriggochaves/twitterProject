@@ -18,6 +18,9 @@ from kivy.core.window import Window
 #importa tela de login
 from LoginScreen import LoginScreen
 
+#importa o db
+
+
 #Classe base do Kivy que retorna uma tela de login
 class Login_GUI(App):
 

@@ -9,7 +9,7 @@
 import MySQLdb as mdb
 import sys
 
-class conexaoMySQL (object):
+class ConexaoMySQL ():
 
 	def __init__(self, host, user, password, database):	# construtor. Cria conexão com o mysql. 
 		self.con = mdb.connect(host, user, password, database)
@@ -35,26 +35,18 @@ class conexaoMySQL (object):
 ############################################################################################################################################
 	def esvaziaTabelaWords(self):
 		with self.con:		
-			self.cur.execute("TRUNCATE Word")	############################################################################################################################################
-	def inserePalavra (self, descrP, lingua, rating):	# inserção de palavra
-		with self.con:			
-			# OBS.: idLanguage é uma STRING. Exemplo: Português é descrLanguage e pt é o idLanguage	   
-			self.cur.execute("SELECT idLanguage FROM Language WHERE descrLanguage LIKE %s", lingua)
-			rows = self.cur.fetchall()
-			if not len(rows):		# recebeu idioma inválido, retorna 0
-				return 0
-			else:				# recebeu um idioma válido e um rating válido insere a palavra no BD
-				idlingua = rows[0]["idLanguage"]
-			self.cur.execute("SELECT rating FROM Rating WHERE descrRating LIKE %s", rating)
-			rows2 = self.cur.fetchall()
-			if not len(rows2):
-				return 0
-			else:
-				idrating = rows2[0]["rating"]
-			print idlingua
-			print idrating			
-			self.cur.execute("INSERT INTO Word (descrWord, idLanguage, rating) VALUES (%s, %s, %s)", (descrP, idlingua, idrating))
-			return 1	############################################################################################################################################
+			self.cur.execute("TRUNCATE Word")	
+
+############################################################################################################################################
+
+	def inserePalavra (self, descrP, idlingua, idrating):	# inserção de palavra			
+		self.cur.execute("INSERT INTO Word (descrWord, idLanguage, rating) VALUES (%s, %s, %s)", (descrP, idlingua, idrating))
+		self.con.commit()
+		return 1
+
+############################################################################################################################################
+#
+#
 	def deletaPalavra (self, descrP, lingua, rating):
 		with self.con:			
 			self.cur.execute("SELECT rating FROM Rating WHERE descrRating LIKE %s", rating)
@@ -107,3 +99,6 @@ class conexaoMySQL (object):
 			self.con.commit()
 		self.con.close()
 		self.cur.close()
+
+	def helpMe(self):
+		print "Stop rainning"

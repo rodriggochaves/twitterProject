@@ -1,15 +1,20 @@
 from TwitterSearch import *
 import unicodedata
 # import re
+import sys
 import datetime
 
 def getTweets(keywords):
+	
+	# let's set a limit to 1000 tweets
+	limit_count = 1000
+
 	# pega o input e transformar em um array de strings
-	# digested_keywords = 
+	keywords = keywords.split(" ")
 
 	try:
 	    tso = TwitterSearchOrder() # create a TwitterSearchOrder object
-	    tso.set_keywords(['Adventure', 'Time']) # let's define all words we would like to have a look for
+	    tso.set_keywords(keywords) # let's define all words we would like to have a look for
 	    tso.set_language('en') # we want to see German tweets only
 	    tso.set_count(100) # please dear Mr Twitter, only give us 100 results per page
 	    tso.set_include_entities(False) # and don't give us all those entity information
@@ -35,6 +40,11 @@ def getTweets(keywords):
 	        saveFile.write(data2Save)
 	        saveFile.write('\n')
 	        saveFile.close()
+
+	        limit_count -= 1
+	        
+	        if limit_count == 0:
+				break
 
 
 	except TwitterSearchException as e: # take care of all those ugly errors if there are some

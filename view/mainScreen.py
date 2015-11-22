@@ -15,10 +15,21 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
 from kivy.uix.popup import *
+from kivy.uix.checkbox import CheckBox
+from kivy.graphics import Color
+from kivy.uix.dropdown import DropDown
 
 import nltk.tweet_search
+import db.lp
 
 class mainScreen(FloatLayout):
+
+	# atributos da classe
+	
+	good_mood_checked = False
+	bad_mood_checked = False
+
+	# métodos da classe 
 
 	def __init__(self, **kwargs):
 
@@ -63,10 +74,10 @@ class mainScreen(FloatLayout):
     	pos=(490, 450))
 		self.add_widget(frase_label)
 
-		frase_input = TextInput(multiline=False
+		self.frase_input = TextInput(multiline=False
 		,size_hint=(.40, .25),
 		pos=(500, 330))
-		self.add_widget(frase_input)
+		self.add_widget(self.frase_input)
 
 		treinar = Button(
     	text='Treinar',
@@ -80,18 +91,96 @@ class mainScreen(FloatLayout):
    		size_hint=(.2, .1),
    		pos=(620, 270))
 		self.add_widget(addFrase)
-		addFrase.bind(on_press=self.addFrase)
+		addFrase.bind(on_press=self.addFrase)	
 
+		# language checkbox
+		# language = CheckBox(
+		# 	size_hint=(.1, .1),
+		# 	pos=(570, 230),
+		# 	color=(1, 0, 0, 1),
+		# 	background_color=(0, 0, 0, 1)
+		# )
+		# self.add_widget(language)
+		# language.bind(active=self.select_language)
+
+		# good mood label for language 
+		good_mood_label = Label(
+    		text='Good Humor',
+    		size_hint=(.1, .1),
+    		pos=(500, 230))
+		self.add_widget(good_mood_label)	
+
+		# good mood checkbox
+		good_mood = CheckBox(
+			size_hint=(.1, .1),
+			pos=(570, 230)
+		)
+		self.add_widget(good_mood)
+		good_mood.bind(active=self.select_bad_mood)
+
+		# bad mood label for language 
+		bad_mood_label = Label(
+    		text='Bad Humor',
+    		size_hint=(.1, .1),
+    		pos=(500, 200))
+		self.add_widget(bad_mood_label)	
+
+		# bad mood checkbox
+		bad_mood = CheckBox(
+			size_hint=(.1, .1),
+			pos=(570, 200)
+		)
+		self.add_widget(bad_mood)
+		bad_mood.bind(active=self.select_bad_mood)
 
 	#Metodo que recebe keywords e pesquisa pelos tweets
 	def pesquisar(self,instance):
-		nltk.tweet_search.getTweets(self.keyword_input)
+		nltk.tweet_search.getTweets(self.keyword_input.text)
 
 	def limpar_banco(self,instance):
 		print "Logica para limpar banco"
 
 	def treinar(self,instance):
-		print "logica para treinar"
+		print "logica para adicionar treinar"
 
 	def addFrase(self,instance):
-		print "logica para adicionar frase"
+		dbc = db.lp.ConexaoMySQL("localhost", "root", "", "projetoLPWords")
+
+		# prepara input
+		text = self.frase_input.text.split(";")
+
+		# seleciona o humor da palavra
+		if(self.good_mood_checked and not self.bad_mood_checked):
+			print "Good mood"
+			mood = 10
+		elif (self.bad_mood_checked and not self.good_mood_checked):
+			print "Bad mood"
+			mood = 0
+		else:
+			print "This is not a mess"
+			return 0
+
+		for sentence in text:
+			dbc.inserePalavra(sentence, "pt", mood)
+
+
+	def select_language(self, checkbox, value):
+		if value:
+			print('The checkbox', checkbox, 'is active')
+		else:
+			 print('The checkbox', checkbox, 'is inactive')
+
+
+	def select_good_mood(self, checkbox, value):
+		if value:
+			self.good_mood_checked = True
+		else:
+			self.good_mood_checked = False
+		print self.good_mood_checked
+
+	def select_bad_mood(self, checkbox, value):
+		if value:
+			self.bad_mood_checked = True
+		else:
+			self.bad_mood_checked = False
+		print self.bad_mood_checked
