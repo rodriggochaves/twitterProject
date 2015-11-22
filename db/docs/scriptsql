@@ -1,0 +1,19 @@
+CREATE DATABASE projetoLPWords;
+
+USE projetoLPWords;
+
+CREATE TABLE Word (idWord INT PRIMARY KEY AUTO_INCREMENT, descrWord VARCHAR(200) NOT NULL, idLanguage VARCHAR(5), rating INT, FOREIGN KEY (idLanguage) REFERENCES Language(idLanguage), FOREIGN KEY (rating) REFERENCES Rating(rating));
+
+CREATE TABLE Rating (rating INT PRIMARY KEY, descrRating VARCHAR(50) NOT NULL);
+
+CREATE TABLE Language (idLanguage VARCHAR(5) PRIMARY KEY, descrLanguage VARCHAR(50) NOT NULL UNIQUE);
+
+INSERT INTO Rating (rating, descrRating) VALUES (0, "negative");
+INSERT INTO Rating (rating, descrRating) VALUES (10, "positive");
+
+INSERT INTO Language (idLanguage, descrLanguage) VALUES ("en", "Inglês");
+INSERT INTO Language (idLanguage, descrLanguage) VALUES ("pt", "Português");
+
+COMMIT;
+
+SELECT * FROM Language;
