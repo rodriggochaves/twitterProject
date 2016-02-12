@@ -15,7 +15,7 @@ def getTweets(keywords):
 	try:
 	    tso = TwitterSearchOrder() # create a TwitterSearchOrder object
 	    tso.set_keywords(keywords) # let's define all words we would like to have a look for
-	    tso.set_language('en') # we want to see German tweets only
+	    tso.set_language('pt') # we want to see German tweets only
 	    tso.set_count(100) # please dear Mr Twitter, only give us 100 results per page
 	    tso.set_include_entities(False) # and don't give us all those entity information
 	    # tso.setGeocode(-23.516394,-46.63554,1000,km=True)#I want only posts near Sao Paulo

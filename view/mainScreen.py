@@ -182,7 +182,7 @@ class mainScreen(FloatLayout):
 
 		# seleciona o humor da palavra
 		if(self.good_mood_checked and self.bad_mood_checked):
-			print "This is not a mess"
+			print "Por favor, selecione apenas um sentimento"
 			return 0
 		elif(self.good_mood_checked):
 			print "Good mood"
@@ -191,7 +191,7 @@ class mainScreen(FloatLayout):
 			print "Bad mood"
 			mood = 0
 		else:
-			print "This is not a mess"
+			print "Por favor, selecione apenas um sentimento"
 			return 0
 
 		for sentence in text:
@@ -238,7 +238,7 @@ class mainScreen(FloatLayout):
 				self.negative_result += 1
 
 		print self.total_result
-		print self.positive_result / self.total_result
+		print self.positive_result
 		print self.negative_result
 
 		# block division by zero

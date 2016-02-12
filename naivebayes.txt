@@ -1,0 +1,20 @@
+O Classificador Naive Bayes foi utilizado na aplicação para que ela pudesse 
+classificar tweets, os quais são escritos em linguagem natural, em positivo ou
+negativo conforme uma base de frases pre-selecionadas.
+O Classificador funciona da seguinte maneira:
+	1. Primeiramente, todas as palavras maiores do que 3 letras são separadas 
+	em tokens. As menores são descartadas.
+	2. Depois, a partir de todas as palavras, é verificado a ocurrência de cada
+	uma delas nos tweets positivos ou negativos. Isso é feito por que uma mesma 
+	palavra pode ser usado no sentido positivo ou negativo, dependendo do autor.
+	Portanto, levamos em conta a probalidade de seu significado.
+	3. Logo depois, é criado uma base de treinamento capaz de avaliar uma
+	expressão em positivo e negativo.
+	4. Passamos essa base para um Classifier que possui os métodos em podemos
+	aplicar em novos tweets e descobrir seus sentimentos.
+
+Portanto, podemos verificar que a classificação Naive Bayes usa a probabilidade
+de cada rotulo que é a frequência de cada um deles aparencerem na base de 
+treinamento. Por exemplo, uma palavra pode aparecer 1 vez nos tweets positivos(
+no total de 5) e nenhuma vez nos tweets negativos (total de 5 também). Isso nos
+dará que a probabilidade dela ser 'positiva' é multiplicada por 0.2.

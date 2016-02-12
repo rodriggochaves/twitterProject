@@ -51,7 +51,7 @@ class Classifier():
 	    word_features = wordlist.keys()
 	    return word_features
 
-	# análisa quais features estão presentes no determinado tweet
+	# analisa quais features estao presentes no determinado tweet
 	# {
 	# 	Features ============ Occurrence
 	#  'contains(looking)': False,
